@@ -1,592 +1,92 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Kelime Ustası uygulaması gizlilik politikası." />
-  <title>Gizlilik Politikası – Kelime Ustası</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rodilot Studio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #0f172a;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
 
-    :root {
-      --accent:        #4f46e5;
-      --accent-light:  #6366f1;
-      --accent-dark:   #3730a3;
-      --accent-bg:     #eef2ff;
-      --bg:            #f1f5f9;
-      --surface:       #ffffff;
-      --surface2:      #f8fafc;
-      --text:          #0f172a;
-      --text-body:     #334155;
-      --muted:         #64748b;
-      --border:        #e2e8f0;
-      --shadow-sm:     0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
-      --shadow-md:     0 4px 16px rgba(79,70,229,.10), 0 1px 4px rgba(0,0,0,.06);
-      --shadow-lg:     0 10px 40px rgba(79,70,229,.13), 0 2px 8px rgba(0,0,0,.07);
-      --radius:        14px;
-      --radius-sm:     8px;
-    }
+        .container {
+            max-width: 600px;
+            padding: 20px;
+        }
 
-    html { scroll-behavior: smooth; }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 50%, #e0f2fe 100%);
-      background-attachment: fixed;
-      color: var(--text-body);
-      line-height: 1.75;
-      min-height: 100vh;
-      padding: 2rem 1rem 3rem;
-    }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
 
-    /* ── Top Badge ── */
-    .top-badge {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-    .top-badge span {
-      display: inline-flex;
-      align-items: center;
-      gap: .45rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: .35rem 1rem;
-      font-size: .78rem;
-      font-weight: 600;
-      color: var(--muted);
-      box-shadow: var(--shadow-sm);
-      letter-spacing: .02em;
-    }
-    .top-badge .dot {
-      width: 7px; height: 7px;
-      background: #22c55e;
-      border-radius: 50%;
-      box-shadow: 0 0 0 3px rgba(34,197,94,.2);
-    }
+        .card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
 
-    /* ── Card ── */
-    .container {
-      max-width: 780px;
-      margin: 0 auto;
-      background: var(--surface);
-      border-radius: 20px;
-      box-shadow: var(--shadow-lg);
-      overflow: hidden;
-    }
+        a {
+            display: inline-block;
+            margin-top: 15px;
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-    /* ── Hero Header ── */
-    .hero {
-      background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 55%, var(--accent-light) 100%);
-      padding: 2.75rem 2.5rem 2.25rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -60px;
-      width: 220px; height: 220px;
-      background: rgba(255,255,255,.07);
-      border-radius: 50%;
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -80px; left: -40px;
-      width: 280px; height: 280px;
-      background: rgba(255,255,255,.05);
-      border-radius: 50%;
-    }
-    .hero-inner { position: relative; z-index: 1; }
-    .hero-icon {
-      width: 52px; height: 52px;
-      background: rgba(255,255,255,.18);
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem;
-      margin-bottom: 1rem;
-      border: 1px solid rgba(255,255,255,.25);
-      backdrop-filter: blur(4px);
-    }
-    .hero h1 {
-      font-size: 1.75rem;
-      font-weight: 800;
-      color: #fff;
-      line-height: 1.2;
-      margin-bottom: .5rem;
-      letter-spacing: -.02em;
-    }
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .5rem .75rem;
-      margin-top: .9rem;
-    }
-    .hero-meta .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: .3rem;
-      background: rgba(255,255,255,.15);
-      border: 1px solid rgba(255,255,255,.25);
-      border-radius: 999px;
-      padding: .2rem .75rem;
-      font-size: .75rem;
-      font-weight: 500;
-      color: rgba(255,255,255,.92);
-    }
+        a:hover {
+            text-decoration: underline;
+        }
 
-    /* ── Body ── */
-    .body {
-      padding: 2.25rem 2.5rem 2.5rem;
-    }
-
-    /* ── Intro banner ── */
-    .intro {
-      background: var(--accent-bg);
-      border: 1px solid #c7d2fe;
-      border-radius: var(--radius);
-      padding: 1.1rem 1.35rem;
-      margin-bottom: 2.25rem;
-      font-size: .93rem;
-      color: #312e81;
-      display: flex;
-      gap: .75rem;
-      align-items: flex-start;
-    }
-    .intro-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: .05rem; }
-
-    /* ── Sections ── */
-    section {
-      margin-bottom: 1.75rem;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.35rem 1.5rem;
-      transition: box-shadow .2s;
-    }
-    section:hover {
-      box-shadow: var(--shadow-md);
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: .65rem;
-      margin-bottom: .85rem;
-    }
-    .section-num {
-      width: 28px; height: 28px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: .72rem;
-      font-weight: 800;
-      color: #fff;
-      flex-shrink: 0;
-    }
-    section h2 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -.01em;
-    }
-
-    section p {
-      margin-bottom: .55rem;
-      font-size: .93rem;
-      color: var(--text-body);
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: .5rem 0 .6rem;
-      display: flex;
-      flex-direction: column;
-      gap: .4rem;
-    }
-    ul li {
-      display: flex;
-      align-items: flex-start;
-      gap: .55rem;
-      font-size: .93rem;
-      color: var(--text-body);
-    }
-    ul li::before {
-      content: '';
-      width: 7px; height: 7px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: .55rem;
-    }
-
-    .note {
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      border-radius: var(--radius-sm);
-      padding: .65rem .9rem;
-      font-size: .84rem;
-      color: #9a3412;
-      margin-top: .65rem;
-      display: flex;
-      gap: .5rem;
-      align-items: flex-start;
-    }
-    .note-icon { flex-shrink: 0; }
-
-    /* ── Provider badges ── */
-    .providers {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .5rem;
-      margin-top: .65rem;
-    }
-    .provider-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .4rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: .35rem .8rem;
-      font-size: .82rem;
-      font-weight: 600;
-      color: var(--text);
-      box-shadow: var(--shadow-sm);
-    }
-    .provider-badge .badge-dot {
-      width: 6px; height: 6px;
-      background: var(--accent-light);
-      border-radius: 50%;
-    }
-    .provider-badge small {
-      font-weight: 400;
-      color: var(--muted);
-      font-size: .77rem;
-    }
-
-    /* ── Contact box ── */
-    .contact-box {
-      background: linear-gradient(135deg, var(--accent-bg) 0%, #f0fdf4 100%);
-      border: 1px solid #c7d2fe;
-      border-radius: var(--radius);
-      padding: 1.25rem 1.5rem;
-      display: grid;
-      gap: .75rem;
-    }
-    .contact-row {
-      display: flex;
-      align-items: center;
-      gap: .65rem;
-    }
-    .contact-icon {
-      width: 34px; height: 34px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-      box-shadow: var(--shadow-sm);
-    }
-    .contact-label {
-      font-size: .78rem;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      line-height: 1.1;
-    }
-    .contact-value {
-      font-size: .93rem;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1.3;
-    }
-    .contact-value a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-    .contact-value a:hover { text-decoration: underline; }
-
-    /* ── Footer ── */
-    footer {
-      background: var(--surface2);
-      border-top: 1px solid var(--border);
-      padding: 1.25rem 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: .5rem;
-    }
-    footer p {
-      font-size: .78rem;
-      color: var(--muted);
-    }
-    .footer-brand {
-      display: flex;
-      align-items: center;
-      gap: .4rem;
-      font-size: .78rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-    .footer-brand .mini-dot {
-      width: 6px; height: 6px;
-      background: var(--accent-light);
-      border-radius: 50%;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 620px) {
-      body { padding: 1rem .75rem 2rem; }
-      .hero { padding: 2rem 1.5rem 1.75rem; }
-      .hero h1 { font-size: 1.4rem; }
-      .body { padding: 1.5rem 1.25rem 2rem; }
-      footer { padding: 1rem 1.25rem; flex-direction: column; align-items: flex-start; }
-      section { padding: 1.1rem 1.1rem; }
-    }
-  </style>
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #64748b;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="top-badge">
-    <span><span class="dot"></span> Güncel · 19 Mart 2026</span>
-  </div>
+<div class="container">
 
-  <div class="container">
+    <h1>Kelime Ustası</h1>
 
-    <!-- Hero -->
-    <div class="hero">
-      <div class="hero-inner">
-        <div class="hero-icon">🛡️</div>
-        <h1>Gizlilik Politikası</h1>
-        <p style="color:rgba(255,255,255,.8);font-size:.93rem;margin-top:.3rem;">Kelime Ustası · Rodilot Studio</p>
-        <div class="hero-meta">
-          <span class="chip">📅 Yürürlük: 19/03/2026</span>
-          <span class="chip">🔄 Son Güncelleme: 19/03/2026</span>
-          <span class="chip">🇹🇷 Türkiye</span>
-        </div>
-      </div>
+    <p>
+        Kelime Ustası, kelime bilginizi geliştiren ve hızlı düşünme yeteneğinizi test eden eğlenceli bir kelime oyunudur.
+        Her seviyede yeni kelimeler keşfedin ve kendinizi geliştirin.
+    </p>
+
+    <div class="card">
+        <h2>📱 About the App</h2>
+        <p>
+            - Word puzzle gameplay<br>
+            - Daily challenges<br>
+            - Offline playable<br>
+            - Simple and addictive design
+        </p>
+
+        <a href="privacy.html">Privacy Policy</a>
     </div>
 
-    <!-- Body -->
-    <div class="body">
+    <div class="footer">
+        © 2026 Rodilot Studio. All rights reserved.
+    </div>
 
-      <div class="intro">
-        <span class="intro-icon">ℹ️</span>
-        <span>
-          Rodilot Studio tarafından geliştirilen <strong>Kelime Ustası</strong> bulmaca oyununu tercih ettiğiniz için teşekkür ederiz.
-          Gizliliğiniz bizim için önemlidir. Bu politika, uygulamamızı kullandığınızda hangi verilerin işlendiğini, nasıl kullanıldığını ve haklarınızı açıklar.
-        </span>
-      </div>
+</div>
 
-      <!-- 1 -->
-      <section>
-        <div class="section-header">
-          <div class="section-num">1</div>
-          <h2>Giriş</h2>
-        </div>
-        <p>
-          Rodilot Studio tarafından geliştirilen <strong>"Kelime Ustası"</strong> adlı bulmaca oyununu ("Uygulama") tercih ettiğiniz için teşekkür ederiz.
-          Gizliliğiniz bizim için önemlidir. Bu Gizlilik Politikası, uygulamamızı kullandığınızda hangi verilerin işlendiğini,
-          bu verilerin nasıl kullanıldığını ve haklarınızı açıklamaktadır.
-        </p>
-      </section>
-
-      <!-- 2 -->
-      <section>
-        <div class="section-header">
-          <div class="section-num">2</div>
-          <h2>Kişisel Veri Toplama ve Kullanımı</h2>
-        </div>
-        <p>
-          Kelime Ustası uygulaması, kullanıcılarından <strong>ad, soyad, e-posta adresi, telefon numarası, fiziksel adres veya
-          T.C. Kimlik numarası</strong> gibi hiçbir doğrudan kişisel veri talep etmez ve toplamaz.
-        </p>
-        <p>Uygulamayı kullanmak için herhangi bir hesap oluşturmanıza veya üye olmanıza gerek yoktur.</p>
-      </section>
-
-      <!-- 3 -->
-      <section>
-        <div class="section-header">
-          <div class="section-num">3</div>
-          <h2>Cihaz İçi (Lokal) Depolama ve Oyun Verileri</h2>
-        </div>
-        <p>
-          Oyun deneyiminizi kesintisiz sürdürebilmeniz amacıyla uygulamanızın ürettiği veriler
-          (kalan altın miktarı, ulaşılan seviye/level, oyun içi puanlar vb.)
-          <strong>yalnızca cihazınızın yerel depolama alanında (Local Storage)</strong> saklanır.
-        </p>
-        <ul>
-          <li>Bu veriler bizim sunucularımıza gönderilmez veya tarafımızca uzaktan erişilmez.</li>
-          <li>
-            <strong>Veri Silme:</strong> Uygulamayı cihazınızdan kaldırdığınızda veya cihaz ayarlarından uygulamanın
-            önbelleğini/verilerini temizlediğinizde, bu oyun içi ilerleme verileri kalıcı olarak silinir ve tarafımızca geri getirilemez.
-          </li>
-        </ul>
-      </section>
-
-      <!-- 4 -->
-      <section>
-        <div class="section-header">
-          <div class="section-num">4</div>
-          <h2>Uygulama İçi Satın Alımlar (IAP)</h2>
-        </div>
-        <p>Uygulamamız, ek içerik veya avantajlar sağlamak amacıyla Uygulama İçi Satın Alma (In-App Purchases) seçenekleri sunar.</p>
-        <ul>
-          <li>Tüm ödeme işlemleri doğrudan <strong>Google Play Faturalandırma</strong> sistemi üzerinden güvenli bir şekilde gerçekleştirilir.</li>
-          <li>Kredi kartı numarası, banka hesap bilgileri veya diğer finansal bilgileriniz Rodilot Studio tarafından <strong>kesinlikle toplanmaz, işlenmez veya saklanmaz</strong>.</li>
-          <li>Satın alma geçmişinizin doğrulanması amacıyla <strong>RevenueCat</strong> gibi güvenilir üçüncü taraf altyapı servisleri kullanılabilir. Bu servisler yalnızca satın alımın geçerliliğini doğrulamak için gerekli anonim işlem kimliklerini (Transaction ID) işler.</li>
-        </ul>
-      </section>
-
-      <!-- 5 -->
-      <section>
-        <div class="section-header">
-          <div class="section-num">5</div>
-          <h2>Otomatik Toplanan Teknik Veriler ve Reklamlar</h2>
-        </div>
-        <p>Uygulamanın sorunsuz çalışması, hataların giderilmesi ve ücretsiz kalabilmesi için bazı anonim/teknik veriler otomatik olarak işlenebilir:</p>
-        <ul>
-          <li><strong>Cihaz Bilgileri:</strong> İşletim sistemi sürümü, cihaz modeli, dil ayarları.</li>
-          <li><strong>Kullanım ve Çökme Verileri:</strong> Uygulamanın hangi bölümlerinde hata yaşandığına dair anonim hata günlükleri.</li>
-          <li><strong>Reklam Kimliği (Advertising ID):</strong> Reklam destekli sürümlerde, kullanıcılara uygun reklamlar göstermek ve reklam performansını ölçmek amacıyla kullanılabilir. Cihaz ayarlarınızdan reklam takibini sınırlandırabilirsiniz.</li>
-        </ul>
-      </section>
-
-      <!-- 6 -->
-      <section>
-        <div class="section-header">
-          <div class="section-num">6</div>
-          <h2>Üçüncü Taraf Hizmet Sağlayıcılar</h2>
-        </div>
-        <p>Aşağıdaki üçüncü taraf hizmetler entegre edilmiş olabilir. Bu hizmetlerin veri işleme süreçleri kendi gizlilik politikalarına tabidir:</p>
-        <div class="providers">
-          <a class="provider-badge" href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
-            <span class="badge-dot"></span> Google Play Services &amp; Billing <small>— Gizlilik Politikası ↗</small>
-          </a>
-          <a class="provider-badge" href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
-            <span class="badge-dot"></span> Google AdMob <small>— Reklam Sunumu ↗</small>
-          </a>
-          <a class="provider-badge" href="https://www.revenuecat.com/privacy" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
-            <span class="badge-dot"></span> RevenueCat <small>— Satın Alma Yönetimi ↗</small>
-          </a>
-        </div>
-      </section>
-
-      <!-- 7 -->
-      <section>
-        <div class="section-header">
-          <div class="section-num">7</div>
-          <h2>Veri Paylaşımı</h2>
-        </div>
-        <p>Kullanıcı verilerinizi hiçbir şart altında üçüncü şahıslara <strong>satmıyoruz</strong>. Yalnızca aşağıdaki durumlarda paylaşım söz konusu olabilir:</p>
-        <ul>
-          <li>Yukarıda belirtilen üçüncü taraf servis sağlayıcılarla (sadece uygulamanın çalışması ve reklam gösterimi için gerekli teknik düzeyde).</li>
-          <li>Geçerli bir yasal süreç, mahkeme kararı veya resmi makamların yasal talebi doğrultusunda yasal yükümlülüklerimizi yerine getirmek amacıyla.</li>
-        </ul>
-      </section>
-
-      <!-- 8 -->
-      <section>
-        <div class="section-header">
-          <div class="section-num">8</div>
-          <h2>Çocukların Gizliliği</h2>
-        </div>
-        <p>
-          Uygulamamız genel kitleye hitap etmekle birlikte, <strong>13 yaşın altındaki çocuklardan</strong> bilerek herhangi bir kişisel veri toplamayı amaçlamaz.
-        </p>
-      </section>
-
-      <!-- 9 -->
-      <section>
-        <div class="section-header">
-          <div class="section-num">9</div>
-          <h2>Veri Silme ve Kullanıcı Hakları</h2>
-        </div>
-        <p>
-          Uygulamamız kişisel bir hesap oluşturmanızı gerektirmediği ve verilerinizi cihazınızda yerel olarak tuttuğu için;
-          verilerinizi silmek istediğinizde:
-        </p>
-        <ul>
-          <li>Uygulamayı cihazınızdan tamamen kaldırmanız (uninstall), <strong>veya</strong></li>
-          <li>Cihazınızın <strong>Ayarlar → Uygulamalar → Kelime Ustası → Depolama → "Verileri Temizle"</strong> adımlarını izlemeniz yeterlidir.</li>
-        </ul>
-        <div class="note">
-          <span class="note-icon">⚠️</span>
-          <span>Bu işlem, size ait tüm yerel verileri kalıcı olarak yok edecektir.</span>
-        </div>
-      </section>
-
-      <!-- 10 -->
-      <section>
-        <div class="section-header">
-          <div class="section-num">10</div>
-          <h2>Politika Güncellemeleri</h2>
-        </div>
-        <p>
-          Bu Gizlilik Politikası, mevzuat değişiklikleri veya uygulamaya eklenecek yeni özellikler doğrultusunda zaman zaman güncellenebilir.
-          Herhangi bir değişiklik yapıldığında, güncel metin bu sayfada yayınlanacak ve "Son Güncelleme Tarihi" yenilenecektir.
-        </p>
-      </section>
-
-      <!-- 11 -->
-      <section>
-        <div class="section-header">
-          <div class="section-num">11</div>
-          <h2>İletişim</h2>
-        </div>
-        <p style="margin-bottom:1rem;">
-          Bu Gizlilik Politikası veya verilerinizin işlenmesiyle ilgili herhangi bir sorunuz, öneriniz veya şikayetiniz varsa,
-          lütfen bizimle iletişime geçmekten çekinmeyin:
-        </p>
-        <div class="contact-box">
-          <div class="contact-row">
-            <div class="contact-icon">🏢</div>
-            <div>
-              <div class="contact-label">Geliştirici</div>
-              <div class="contact-value">Rodilot Studio</div>
-            </div>
-          </div>
-          <div class="contact-row">
-            <div class="contact-icon">✉️</div>
-            <div>
-              <div class="contact-label">E-posta</div>
-              <div class="contact-value"><a href="mailto:studiorodilot@gmail.com">studiorodilot@gmail.com</a></div>
-            </div>
-          </div>
-          <div class="contact-row">
-            <div class="contact-icon">📍</div>
-            <div>
-              <div class="contact-label">Ülke</div>
-              <div class="contact-value">Türkiye</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </div><!-- /.body -->
-
-    <footer>
-      <p>&copy; <span id="year"></span> Rodilot Studio. Tüm hakları saklıdır.</p>
-      <div class="footer-brand"><span class="mini-dot"></span> Kelime Ustası</div>
-    </footer>
-
-  </div><!-- /.container -->
-
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
