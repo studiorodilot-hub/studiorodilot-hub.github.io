@@ -1,92 +1,1425 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rodilot Studio</title>
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelime Ustası – Sözcük Bulmaca Oyunu</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background: #0f172a;
-            color: #e2e8f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            text-align: center;
-        }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-        .container {
-            max-width: 600px;
-            padding: 20px;
-        }
+      :root {
+        --ink: #1a1a2e;
+        --cream: #f5f0e8;
+        --gold: #e8b84b;
+        --gold-light: #f5d07a;
+        --teal: #2ec4b6;
+        --teal-dark: #1a8c82;
+        --purple: #6c4ef2;
+        --purple-light: #9b80f5;
+        --coral: #ff6b6b;
+        --white: #ffffff;
+        --card-bg: rgba(255, 255, 255, 0.06);
+        --border: rgba(255, 255, 255, 0.12);
+      }
 
-        h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
+      html {
+        scroll-behavior: smooth;
+      }
 
-        p {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #cbd5e1;
-        }
+      body {
+        font-family: 'Nunito', sans-serif;
+        background: var(--ink);
+        color: var(--white);
+        overflow-x: hidden;
+      }
 
-        .card {
-            background: #1e293b;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 20px;
-        }
+      /* ---- NOISE TEXTURE ---- */
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 0;
+      }
 
-        a {
-            display: inline-block;
-            margin-top: 15px;
-            color: #38bdf8;
-            text-decoration: none;
-            font-weight: bold;
-        }
+      /* ---- NAV ---- */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.2rem 2.5rem;
+        background: rgba(26, 26, 46, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+      }
 
-        a:hover {
-            text-decoration: underline;
-        }
+      .nav-logo {
+        font-family: 'Bebas Neue', cursive;
+        font-size: 1.8rem;
+        color: var(--gold);
+        letter-spacing: 2px;
+      }
 
-        .footer {
-            margin-top: 30px;
-            font-size: 12px;
-            color: #64748b;
+      .nav-logo span {
+        color: var(--teal);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+
+      .nav-links a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: color 0.2s;
+      }
+
+      .nav-links a:hover {
+        color: var(--gold);
+      }
+
+      .nav-cta {
+        background: var(--gold);
+        color: var(--ink);
+        padding: 0.5rem 1.4rem;
+        border-radius: 50px;
+        font-weight: 800;
+        font-size: 0.85rem;
+        text-decoration: none;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+
+      .nav-cta:hover {
+        background: var(--gold-light);
+        transform: scale(1.04);
+      }
+
+      /* ---- HERO ---- */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding: 8rem 2.5rem 4rem;
+        overflow: hidden;
+      }
+
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(ellipse 80% 60% at 70% 50%, rgba(108, 78, 242, 0.25) 0%, transparent 70%),
+          radial-gradient(ellipse 50% 50% at 20% 80%, rgba(46, 196, 182, 0.15) 0%, transparent 60%);
+        z-index: 0;
+      }
+
+      /* Floating letter tiles */
+      .tiles-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .tile {
+        position: absolute;
+        width: 52px;
+        height: 52px;
+        border: 2px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Bebas Neue', cursive;
+        font-size: 1.6rem;
+        color: rgba(255, 255, 255, 0.08);
+        animation: floatTile 8s ease-in-out infinite;
+      }
+
+      @keyframes floatTile {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
         }
+        33% {
+          transform: translateY(-18px) rotate(5deg);
+        }
+        66% {
+          transform: translateY(8px) rotate(-3deg);
+        }
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(232, 184, 75, 0.15);
+        border: 1px solid rgba(232, 184, 75, 0.35);
+        color: var(--gold);
+        padding: 0.35rem 1rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+        animation: fadeUp 0.6s ease both;
+      }
+
+      .hero-badge::before {
+        content: '★';
+        font-size: 0.7rem;
+      }
+
+      .hero-title {
+        font-family: 'Bebas Neue', cursive;
+        font-size: clamp(3.5rem, 7vw, 6rem);
+        line-height: 0.95;
+        letter-spacing: 2px;
+        animation: fadeUp 0.6s 0.1s ease both;
+      }
+
+      .hero-title .line2 {
+        color: var(--gold);
+        display: block;
+      }
+
+      .hero-title .line3 {
+        color: var(--teal);
+        display: block;
+      }
+
+      .hero-subtitle {
+        margin-top: 1.5rem;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.65);
+        max-width: 480px;
+        animation: fadeUp 0.6s 0.2s ease both;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2.5rem;
+        flex-wrap: wrap;
+        animation: fadeUp 0.6s 0.3s ease both;
+      }
+
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: var(--gold);
+        color: var(--ink);
+        padding: 0.85rem 2rem;
+        border-radius: 50px;
+        font-weight: 800;
+        font-size: 1rem;
+        text-decoration: none;
+        transition:
+          transform 0.2s,
+          background 0.2s;
+        box-shadow: 0 8px 32px rgba(232, 184, 75, 0.3);
+      }
+
+      .btn-primary:hover {
+        background: var(--gold-light);
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: transparent;
+        color: var(--white);
+        padding: 0.85rem 2rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1rem;
+        text-decoration: none;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+      }
+
+      .btn-secondary:hover {
+        border-color: var(--teal);
+        color: var(--teal);
+      }
+
+      .hero-stats {
+        display: flex;
+        gap: 2rem;
+        margin-top: 3rem;
+        animation: fadeUp 0.6s 0.4s ease both;
+      }
+
+      .stat-item {
+        text-align: left;
+      }
+      .stat-num {
+        font-family: 'Bebas Neue', cursive;
+        font-size: 2rem;
+        color: var(--gold);
+        line-height: 1;
+      }
+      .stat-label {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+      }
+
+      /* ---- PHONE MOCKUP ---- */
+      .hero-visual {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        animation: fadeUp 0.8s 0.2s ease both;
+      }
+
+      .phone-wrapper {
+        position: relative;
+      }
+
+      .phone-glow {
+        position: absolute;
+        inset: -30px;
+        background: radial-gradient(ellipse, rgba(108, 78, 242, 0.4) 0%, transparent 65%);
+        border-radius: 60px;
+        animation: pulse 3s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.8;
+          transform: scale(1.05);
+        }
+      }
+
+      .phone-frame {
+        position: relative;
+        width: 260px;
+        background: #0d0d1a;
+        border-radius: 40px;
+        border: 3px solid rgba(255, 255, 255, 0.15);
+        overflow: hidden;
+        box-shadow:
+          0 40px 80px rgba(0, 0, 0, 0.6),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+
+      .phone-notch {
+        width: 100px;
+        height: 26px;
+        background: #0d0d1a;
+        border-radius: 0 0 16px 16px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+
+      .phone-screen {
+        padding: 0.5rem 1rem 1.5rem;
+        min-height: 440px;
+      }
+
+      .phone-screenshot {
+        height: auto;
+        width: 100%;
+        border-radius: 10px;
+      }
+
+      .phone-header {
+        text-align: center;
+        padding: 0.8rem 0 1rem;
+        font-family: 'Bebas Neue', cursive;
+        font-size: 1.3rem;
+        color: var(--gold);
+        letter-spacing: 2px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        margin-bottom: 1rem;
+      }
+
+      .phone-level {
+        font-size: 0.65rem;
+        color: rgba(255, 255, 255, 0.4);
+        font-family: 'Nunito', sans-serif;
+        letter-spacing: 1px;
+      }
+
+      .word-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 5px;
+        margin-bottom: 1rem;
+      }
+
+      .cell {
+        aspect-ratio: 1;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1.5px solid rgba(255, 255, 255, 0.12);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Bebas Neue', cursive;
+        font-size: 1.1rem;
+        font-weight: 700;
+        transition: all 0.3s;
+      }
+
+      .cell.correct {
+        background: rgba(46, 196, 182, 0.3);
+        border-color: var(--teal);
+        color: var(--teal);
+      }
+      .cell.close {
+        background: rgba(232, 184, 75, 0.3);
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+      .cell.filled {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.3);
+        color: white;
+      }
+
+      .phone-keyboard {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        gap: 3px;
+        margin-top: 0.5rem;
+      }
+
+      .key {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+        padding: 5px 2px;
+        text-align: center;
+        font-size: 0.55rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.7);
+        font-family: 'Nunito', sans-serif;
+      }
+
+      .key.teal {
+        background: rgba(46, 196, 182, 0.3);
+        color: var(--teal);
+      }
+
+      /* floating badges around phone */
+      .badge-float {
+        position: absolute;
+        background: rgba(26, 26, 46, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 14px;
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        backdrop-filter: blur(8px);
+        animation: floatBadge 5s ease-in-out infinite;
+        white-space: nowrap;
+      }
+
+      .badge-float.top-right {
+        top: 73px;
+        right: -120px;
+        animation-delay: 0.5s;
+      }
+      .badge-float.bottom-left {
+        bottom: 60px;
+        left: -90px;
+        animation-delay: 1.5s;
+        color: var(--teal);
+        border-color: rgba(46, 196, 182, 0.3);
+      }
+
+      @keyframes floatBadge {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      /* ---- SECTION COMMON ---- */
+      section {
+        position: relative;
+        z-index: 1;
+        padding: 6rem 2.5rem;
+      }
+
+      .section-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section-tag {
+        display: inline-block;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 1rem;
+      }
+
+      .section-title {
+        font-family: 'Bebas Neue', cursive;
+        font-size: clamp(2.2rem, 5vw, 3.8rem);
+        line-height: 1;
+        letter-spacing: 2px;
+        margin-bottom: 1rem;
+      }
+
+      .section-desc {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.55);
+        line-height: 1.7;
+        max-width: 500px;
+      }
+
+      /* ---- FEATURES ---- */
+      #ozellikler {
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 3.5rem;
+      }
+
+      .feature-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2rem 1.8rem;
+        transition:
+          transform 0.3s,
+          border-color 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--accent-color, var(--gold)),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+      .feature-card:hover::before {
+        opacity: 1;
+      }
+
+      .feature-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 1.2rem;
+      }
+
+      .feature-icon.gold {
+        background: rgba(232, 184, 75, 0.15);
+      }
+      .feature-icon.teal {
+        background: rgba(46, 196, 182, 0.15);
+      }
+      .feature-icon.purple {
+        background: rgba(108, 78, 242, 0.15);
+      }
+      .feature-icon.coral {
+        background: rgba(255, 107, 107, 0.15);
+      }
+
+      .feature-title {
+        font-size: 1.05rem;
+        font-weight: 800;
+        margin-bottom: 0.6rem;
+      }
+
+      .feature-desc {
+        font-size: 0.88rem;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.7;
+      }
+
+      /* ---- SCREENSHOTS ---- */
+      #ekran-goruntuleri {
+        overflow: hidden;
+      }
+
+      .screenshots-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .screenshots-track {
+        display: flex;
+        gap: 1.5rem;
+        overflow-x: auto;
+        padding-bottom: 1rem;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(232, 184, 75, 0.4) transparent;
+        scroll-snap-type: x mandatory;
+      }
+
+      .screenshots-track::-webkit-scrollbar {
+        height: 4px;
+      }
+      .screenshots-track::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .screenshots-track::-webkit-scrollbar-thumb {
+        background: rgba(232, 184, 75, 0.4);
+        border-radius: 2px;
+      }
+
+      .screenshot-item {
+        flex: 0 0 240px;
+        scroll-snap-align: start;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.04);
+        transition: transform 0.3s;
+        aspect-ratio: 9/18;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .screenshot-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .screenshot-item:hover {
+        transform: scale(1.03);
+      }
+
+      /* screenshot placeholder */
+      .ss-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .logo {
+        width: 90px;
+      }
+      /* ---- HOW IT WORKS ---- */
+      #nasil-oynanir {
+        background: rgba(0, 0, 0, 0.15);
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+        margin-top: 4rem;
+        position: relative;
+      }
+
+      .steps::before {
+        content: '';
+        position: absolute;
+        top: 32px;
+        left: 12.5%;
+        right: 12.5%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--gold), var(--teal), transparent);
+        z-index: 0;
+      }
+
+      .step {
+        text-align: center;
+        padding: 0 1rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .step-num {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        border: 2px solid var(--gold);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Bebas Neue', cursive;
+        font-size: 1.8rem;
+        color: var(--gold);
+        margin: 0 auto 1.5rem;
+        background: var(--ink);
+        transition:
+          background 0.3s,
+          transform 0.3s;
+      }
+
+      .step:hover .step-num {
+        background: var(--gold);
+        color: var(--ink);
+        transform: scale(1.1);
+      }
+
+      .step-title {
+        font-size: 1rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+      }
+
+      .step-desc {
+        font-size: 0.83rem;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.6;
+      }
+
+      /* ---- REVIEWS ---- */
+      #yorumlar {
+        overflow: hidden;
+      }
+
+      .reviews-track {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 3rem;
+        animation: scrollReviews 30s linear infinite;
+        width: max-content;
+      }
+
+      .reviews-outer {
+        overflow: hidden;
+        mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+      }
+
+      @keyframes scrollReviews {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      .review-card {
+        flex: 0 0 300px;
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 1.5rem;
+      }
+
+      .review-stars {
+        color: var(--gold);
+        font-size: 0.85rem;
+        letter-spacing: 2px;
+        margin-bottom: 0.8rem;
+      }
+
+      .review-text {
+        font-size: 0.88rem;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+      }
+
+      .review-author {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* ---- CTA ---- */
+      #indir {
+        text-align: center;
+        background: radial-gradient(
+          ellipse 60% 80% at 50% 50%,
+          rgba(108, 78, 242, 0.2),
+          transparent
+        );
+      }
+
+      .cta-title {
+        font-family: 'Bebas Neue', cursive;
+        font-size: clamp(2.5rem, 6vw, 5rem);
+        letter-spacing: 3px;
+        line-height: 1;
+        margin-bottom: 1.5rem;
+      }
+
+      .cta-title span {
+        color: var(--gold);
+      }
+
+      .cta-sub {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.55);
+        max-width: 460px;
+        margin: 0 auto 3rem;
+        line-height: 1.7;
+      }
+
+      .store-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        background: var(--white);
+        color: var(--ink);
+        padding: 0.9rem 2rem;
+        border-radius: 14px;
+        text-decoration: none;
+        font-weight: 800;
+        font-size: 1rem;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+      }
+
+      .store-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 48px rgba(255, 255, 255, 0.15);
+      }
+
+      .store-btn svg {
+        width: 28px;
+        height: 28px;
+      }
+
+      .store-btn-wrap {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .store-btn .store-label {
+        text-align: left;
+      }
+
+      .store-btn .store-label small {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 600;
+        opacity: 0.6;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* ---- FOOTER ---- */
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 2.5rem 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .footer-logo {
+        font-family: 'Bebas Neue', cursive;
+        font-size: 1.5rem;
+        color: var(--gold);
+        letter-spacing: 2px;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.4);
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: color 0.2s;
+      }
+
+      .footer-links a:hover {
+        color: var(--white);
+      }
+
+      .footer-copy {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.25);
+      }
+
+      /* ---- ANIMATIONS ---- */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ---- RESPONSIVE ---- */
+      @media (max-width: 900px) {
+        .hero-inner {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .hero-actions {
+          justify-content: center;
+        }
+        .hero-stats {
+          justify-content: center;
+        }
+        .hero-visual {
+          order: -1;
+        }
+        .features-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .steps {
+          grid-template-columns: 1fr 1fr;
+        }
+        .steps::before {
+          display: none;
+        }
+        .badge-float {
+          display: none;
+        }
+      }
+
+      @media (max-width: 600px) {
+        nav {
+          padding: 1rem 1.5rem;
+        }
+        .nav-links {
+          display: none;
+        }
+        section {
+          padding: 4rem 1.5rem;
+        }
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+        .steps {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <div class="nav-logo">
+        RODILOT
+        <span>STUDIO</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#ozellikler">Özellikler</a></li>
+        <li><a href="#nasil-oynanir">Nasıl Oynanır</a></li>
+        <li><a href="#yorumlar">Yorumlar</a></li>
+      </ul>
+      <a
+        href="https://play.google.com/store/apps/details?id=com.rodilot.studio.kelimeustasi"
+        class="nav-cta"
+        target="_blank"
+      >
+        Ücretsiz İndir
+      </a>
+    </nav>
 
-<div class="container">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg"></div>
 
-    <h1>Kelime Ustası</h1>
+      <!-- floating letter tiles -->
+      <div class="tiles-bg" id="tilesBg"></div>
 
-    <p>
-        Kelime Ustası, kelime bilginizi geliştiren ve hızlı düşünme yeteneğinizi test eden eğlenceli bir kelime oyunudur.
-        Her seviyede yeni kelimeler keşfedin ve kendinizi geliştirin.
-    </p>
+      <div class="hero-inner">
+        <div class="hero-content">
+          <div class="hero-badge">5.0 Yıldız · Türkçe Kelime Oyunu</div>
+          <h1 class="hero-title">
+            Kelimeleri
+            <br />
+            <span class="line2">Bul,</span>
+            <span class="line3">Ustalaş.</span>
+          </h1>
+          <p class="hero-subtitle">
+            Her seviye yeni bir meydan okuma. Sözcük bilginizi test edin, zihninizi keskinleştirin
+            ve Türkçe kelimeler üzerinde gerçek bir usta olun.
+          </p>
+          <div class="hero-actions">
+            <a
+              href="https://play.google.com/store/apps/details?id=com.rodilot.studio.kelimeustasi"
+              class="btn-primary"
+              target="_blank"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M3 20.5v-17c0-.83 1-.83 1.5-.5l15 8.5c.5.28.5 1-.5 1.5L4.5 21c-.5.28-1.5.28-1.5-.5z"
+                />
+              </svg>
+              Google Play'den İndir
+            </a>
+            <a href="#nasil-oynanir" class="btn-secondary">Nasıl Oynanır →</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-num">5.0</div>
+              <div class="stat-label">Puan</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">3+</div>
+              <div class="stat-label">Yaş</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">365</div>
+              <div class="stat-label">Seviye</div>
+            </div>
+          </div>
+        </div>
 
-    <div class="card">
-        <h2>📱 About the App</h2>
-        <p>
-            - Word puzzle gameplay<br>
-            - Daily challenges<br>
-            - Offline playable<br>
-            - Simple and addictive design
-        </p>
+        <!-- Phone Mockup -->
+        <div class="hero-visual">
+          <div class="phone-wrapper">
+            <div class="phone-glow"></div>
+            <div class="phone-frame">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <img
+                  class="phone-screenshot"
+                  src="https://play-lh.googleusercontent.com/Sr4ScwWJmID9_Xu2WgL_OdhdnHOh9V3gfvUXiJyhscb6EZi7o5Hh4_gDUjG67a5qiRelsuoxEWkqQnFyBIMPLoQ=w5120-h2880"
+                />
 
-        <a href="privacy.html">Privacy Policy</a>
-    </div>
+                <div class="word-grid" id="wordGrid"></div>
+                <div class="phone-keyboard" id="phoneKeyboard"></div>
+              </div>
+            </div>
+            <div class="badge-float top-right">
+              <img class="logo" src="logo.png" alt="Logo" />
+            </div>
+            <div class="badge-float bottom-left">
+              <img
+                src="https://play-lh.googleusercontent.com/tyy8HLZXsmQCWH2KZ3Trf1cIAYOccZ8pPsskh4FQIXnEy9Pm6DLyXxubxh-vsFCdr1K8CK4ppW3Uob9h1vcbsg=w480-h960"
+                alt=""
+                style="width: 75px"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <div class="footer">
-        © 2026 Rodilot Studio. All rights reserved.
-    </div>
+    <!-- FEATURES -->
+    <section id="ozellikler">
+      <div class="section-inner">
+        <div class="reveal">
+          <span class="section-tag">Özellikler</span>
+          <h2 class="section-title">Neden Kelime Ustası?</h2>
+          <p class="section-desc">
+            Basit arayüz, akıcı oynanış ve sürekli artan zorlukla kendinizi geliştirin.
+          </p>
+        </div>
 
-</div>
+        <div class="features-grid">
+          <div class="feature-card reveal" style="--accent-color: var(--gold)">
+            <div class="feature-icon gold">📚</div>
+            <div class="feature-title">Farklı Kategoriler</div>
+            <div class="feature-desc">
+              Geniş kelime havuzuyla her kategoride yeni bulmacalar ve zorlu kelimeler sizi
+              bekliyor.
+            </div>
+          </div>
+          <div class="feature-card reveal" style="--accent-color: var(--teal)">
+            <div class="feature-icon teal">📈</div>
+            <div class="feature-title">Adım Adım İlerleme</div>
+            <div class="feature-desc">
+              Her bölüm öncekinden daha zorlu. Ustalaştıkça seviyenizi artırın ve yeni bulmacaların
+              kilidini açın.
+            </div>
+          </div>
+          <div class="feature-card reveal" style="--accent-color: var(--purple)">
+            <div class="feature-icon purple">⚡</div>
+            <div class="feature-title">Hızlı & Akıcı</div>
+            <div class="feature-desc">
+              Sade tasarım ve hızlı oynanışla dikkatinizi dağıtacak hiçbir şey yok — sadece
+              kelimeler.
+            </div>
+          </div>
+          <div class="feature-card reveal" style="--accent-color: var(--coral)">
+            <div class="feature-icon coral">💾</div>
+            <div class="feature-title">Otomatik Kaydetme</div>
+            <div class="feature-desc">
+              Kaldığınız yerden devam edin. İlerlemeniz cihazınıza kaydedilir, hiçbir şey kaybolmaz.
+            </div>
+          </div>
+          <div class="feature-card reveal" style="--accent-color: var(--gold)">
+            <div class="feature-icon gold">🔒</div>
+            <div class="feature-title">Veri Güvenliği</div>
+            <div class="feature-desc">
+              Üçüncü taraflarla hiçbir veri paylaşılmaz. Gizliliğiniz bizim için önemli.
+            </div>
+          </div>
+          <div class="feature-card reveal" style="--accent-color: var(--teal)">
+            <div class="feature-icon teal">🧠</div>
+            <div class="feature-title">Zihinsel Egzersiz</div>
+            <div class="feature-desc">
+              Her kelime bulmacası, kelime dağarcığınızı ve zihinsel çevikliğinizi geliştirir.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-</body>
+    <!-- SCREENSHOTS -->
+    <section id="ekran-goruntuleri">
+      <div class="section-inner">
+        <div class="screenshots-header reveal">
+          <div>
+            <span class="section-tag">Ekran Görüntüleri</span>
+            <h2 class="section-title">Oyunu Keşfedin</h2>
+          </div>
+          <a
+            href="https://play.google.com/store/apps/details?id=com.rodilot.studio.kelimeustasi"
+            class="btn-primary"
+            target="_blank"
+            style="font-size: 0.85rem; padding: 0.65rem 1.5rem"
+          >
+            İndir →
+          </a>
+        </div>
+
+        <div class="screenshots-track" id="screenshotsTrack"></div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="nasil-oynanir">
+      <div class="section-inner">
+        <div class="reveal" style="text-align: center">
+          <span class="section-tag">Nasıl Oynanır</span>
+          <h2 class="section-title">4 Adımda Ustalaşın</h2>
+        </div>
+
+        <div class="steps">
+          <div class="step reveal">
+            <div class="step-num">1</div>
+            <div class="step-title">Bir Bölüm Seç</div>
+            <div class="step-desc">
+              Farklı kelime kategorilerinden biri seçin ve o bölümün seviyelerine girin.
+            </div>
+          </div>
+          <div class="step reveal">
+            <div class="step-num">2</div>
+            <div class="step-title">Kelimeyi Tahmin Et</div>
+            <div class="step-desc">Gizli kelimeyi harfleri kullanarak tahmin etmeye çalışın.</div>
+          </div>
+          <div class="step reveal">
+            <div class="step-num">3</div>
+            <div class="step-title">İpuçlarını Takip Et</div>
+            <div class="step-desc">
+              Renkli geri bildirimlerle doğru konumlara doğru harfleri yerleştirin.
+            </div>
+          </div>
+          <div class="step reveal">
+            <div class="step-num">4</div>
+            <div class="step-title">Seviye Atla</div>
+            <div class="step-desc">
+              Her çözülen bulmacayla puanınız artar ve yeni seviyelerin kapısı açılır.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section id="yorumlar">
+      <div class="section-inner">
+        <div class="reveal" style="text-align: center; margin-bottom: 1rem">
+          <span class="section-tag">Kullanıcı Yorumları</span>
+          <h2 class="section-title">5.0 ⭐ Puan</h2>
+        </div>
+      </div>
+
+      <div class="reviews-outer">
+        <div class="reviews-track" id="reviewsTrack"></div>
+      </div>
+    </section>
+
+    <!-- CTA / DOWNLOAD -->
+    <section id="indir">
+      <div class="section-inner">
+        <div class="reveal">
+          <h2 class="cta-title">
+            Hemen Oynamaya
+            <br />
+            <span>Başla.</span>
+          </h2>
+          <p class="cta-sub">
+            Ücretsiz indirin, reklamsız kategorilerle başlayın ve her seviyede kendinizi geliştirin.
+          </p>
+          <div class="store-btn-wrap">
+            <a
+              href="https://play.google.com/store/apps/details?id=com.rodilot.studio.kelimeustasi"
+              class="store-btn"
+              target="_blank"
+            >
+              <!-- Google Play icon -->
+              <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M3.18 23.5c.34.19.74.2 1.1.04l11.67-6.73-2.5-2.5L3.18 23.5zM20.5 10.85l-2.3-1.33-2.79 2.79 2.79 2.79 2.31-1.34c.66-.38.66-1.54-.01-1.91zM1.55.86C1.21 1.22 1 1.75 1 2.44v19.12c0 .69.21 1.22.55 1.58l.08.08 10.71-10.71v-.25L1.63.78l-.08.08zM14.09 8.41L3.29 2.5 13.46 12.5l.63-.64 2.79-2.79-2.79-1.66z"
+                />
+              </svg>
+              <div class="store-label">
+                <small>Google Play'de Ücretsiz</small>
+                Kelime Ustası
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-logo">Kelime Ustası</div>
+      <ul class="footer-links">
+        <li>
+          <a href="https://studiorodilot-hub.github.io/privacy.html" target="_blank">
+            Gizlilik Politikası
+          </a>
+        </li>
+        <li><a href="mailto:studiorodilot@gmail.com">İletişim</a></li>
+        <li>
+          <a href="https://play.google.com/store/apps/developer?id=Rodilot+Studio" target="_blank">
+            Rodilot Studio
+          </a>
+        </li>
+      </ul>
+      <div class="footer-copy">© 2026 Rodilot Studio. Tüm hakları saklıdır.</div>
+    </footer>
+
+    <script>
+      // ---- FLOATING TILES ----
+      const tilesBg = document.getElementById('tilesBg');
+      const letters = 'ABCDEFGHIJKLMNOPRSTUVYZÇĞİÖŞÜ'.split('');
+      for (let i = 0; i < 18; i++) {
+        const tile = document.createElement('div');
+        tile.className = 'tile';
+        tile.textContent = letters[Math.floor(Math.random() * letters.length)];
+        tile.style.left = Math.random() * 95 + '%';
+        tile.style.top = Math.random() * 95 + '%';
+        tile.style.animationDelay = Math.random() * 6 + 's';
+        tile.style.animationDuration = 6 + Math.random() * 6 + 's';
+        tilesBg.appendChild(tile);
+      }
+
+      // ---- PHONE GRID ----
+      const wordGrid = document.getElementById('wordGrid');
+      const rows = [
+        [
+          { l: 'K', t: 'correct' },
+          { l: 'İ', t: 'close' },
+          { l: 'T', t: 'filled' },
+          { l: 'A', t: 'filled' },
+          { l: 'P', t: 'filled' },
+        ],
+        [
+          { l: 'M', t: 'filled' },
+          { l: 'A', t: 'filled' },
+          { l: 'S', t: 'correct' },
+          { l: 'A', t: 'close' },
+          { l: '', t: '' },
+        ],
+        [
+          { l: '', t: '' },
+          { l: '', t: '' },
+          { l: '', t: '' },
+          { l: '', t: '' },
+          { l: '', t: '' },
+        ],
+      ];
+      rows.forEach((row) => {
+        row.forEach((cell) => {
+          const d = document.createElement('div');
+          d.className = 'cell' + (cell.t ? ' ' + cell.t : '');
+          d.textContent = cell.l;
+        });
+      });
+
+      // Keyboard
+      const keyboard = document.getElementById('phoneKeyboard');
+      const keys = 'QWERTYUIOPASDFGHJKLZXCVBNMÇŞİÖÜĞ'.split('').slice(0, 18);
+      keys.forEach((k, i) => {
+        const d = document.createElement('div');
+        d.className = 'key' + (i < 5 ? ' teal' : '');
+        d.textContent = k;
+      });
+
+      // ---- SCREENSHOTS from Play Store ----
+      const ssTrack = document.getElementById('screenshotsTrack');
+      const screenshotUrls = [
+        'https://play-lh.googleusercontent.com/nH8Wnm_4juK2iSk_UmXhYXEGsEDS2DG3XReSrp8INGTNcyv0aozRp-0qEh7yEwWl4n0kuT4v9-CBIpG-MdsO_0g=w5120-h2880',
+        'https://play-lh.googleusercontent.com/Pc3zPY94ooj6GxVU7mfDIg7GDRtlwuNjWGN3myVnqEDmuzNuez5Tf7lX5KsvEbKO6Ybpd1eK-YKDgz5CaogMHw=w5120-h2880',
+        'https://play-lh.googleusercontent.com/ECyosRCan6zYtQZgLtEpH6jDptz8oBy22Si8nuOq_rxtkLg-TRc4Qnbr-buxdkiTy_HcWaJQh8FsKNihNS2a=w5120-h2880',
+        'https://play-lh.googleusercontent.com/Sr4ScwWJmID9_Xu2WgL_OdhdnHOh9V3gfvUXiJyhscb6EZi7o5Hh4_gDUjG67a5qiRelsuoxEWkqQnFyBIMPLoQ=w5120-h2880',
+        'https://play-lh.googleusercontent.com/Axm-BkalofcE06G8Nr8BwkULYEzdLAtLJ7MaGVvsMRCVbVoL-1Kt_EcWzOZTWD0Ui_Bi91c6GJASsnUO9WUizQ=w5120-h2880',
+        'https://play-lh.googleusercontent.com/IWCVaYcA11tO4E_iUXF6iecuigGZnOd0Tc1sibzA9Ei5SOp2dwU2Sj7L1nq9nQqGtixyoqEAuESDhQIL7Pxysw=w5120-h2880',
+        'https://play-lh.googleusercontent.com/s4XcJ_fF6KRpQR6tEOeCwp-cleOLX9oc6nW98mpmoqxlwTUaR9F2to-bnKNzO56v-DXFQE2oXw4PTmXU26Q9gQ=w5120-h2880',
+      ];
+
+      screenshotUrls.forEach((url, i) => {
+        const item = document.createElement('div');
+        item.className = 'screenshot-item';
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = 'Kelime Ustası ekran görüntüsü ' + (i + 1);
+        img.loading = 'lazy';
+        item.appendChild(img);
+        ssTrack.appendChild(item);
+      });
+
+      // ---- REVIEWS ----
+      const reviewsData = [
+        {
+          stars: 5,
+          text: 'Tam aradığım sadelikte.',
+          author: 'Ç. D.',
+        },
+        {
+          stars: 5,
+          text: 'çok keyifli',
+          author: 'B. Y.',
+        },
+        {
+          stars: 5,
+          text: 'Bağımlılık yapıyor! Her gün birkaç seviye atlamadan duramıyorum.',
+          author: 'T. P.',
+        },
+      ];
+
+      const reviewsTrack = document.getElementById('reviewsTrack');
+      const doubled = [...reviewsData, ...reviewsData];
+      doubled.forEach((r) => {
+        const card = document.createElement('div');
+        card.className = 'review-card';
+        card.innerHTML = `
+    <div class="review-stars">${'★'.repeat(r.stars)}</div>
+    <div class="review-text">${r.text}</div>
+    <div class="review-author">— ${r.author}</div>
+  `;
+        reviewsTrack.appendChild(card);
+      });
+
+      // ---- SCROLL REVEAL ----
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+      );
+
+      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    </script>
+  </body>
 </html>
