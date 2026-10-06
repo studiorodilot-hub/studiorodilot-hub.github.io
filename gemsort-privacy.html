@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Gem Sort uygulaması gizlilik politikası.">
+<title>Gizlilik Politikası – Gem Sort</title>
+<link rel="icon" href="gemsort-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg1:#e9eefc;--bg2:#f4effd;--ink:#435c7c;--ink-soft:#6b7c96;--purple:#7a62b8;--purple-soft:#f4f0fd;--card:#fff;--line:#dfe4f3;--mint:#bfe8d3;--mint-deep:#8fcdb0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Fredoka',system-ui,sans-serif;color:var(--ink);background:linear-gradient(180deg,var(--bg1),var(--bg2) 60%,#fdf6fb);min-height:100vh;line-height:1.65;overflow-x:hidden}
+  nav{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.5rem;background:rgba(255,255,255,.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav-logo{display:flex;align-items:center;gap:.6rem;font-weight:700;color:var(--purple);text-decoration:none;letter-spacing:.04em}
+  .nav-logo img{width:32px;height:32px;border-radius:9px}
+  .nav-back{color:var(--ink-soft);text-decoration:none;font-weight:500;font-size:.9rem}
+  .nav-back:hover{color:var(--purple)}
+  .page-hero{text-align:center;padding:3.5rem 1.25rem 2rem}
+  .hero-icon{width:96px;height:96px;border-radius:24px;box-shadow:0 6px 0 #d3c9ef,0 14px 28px rgba(122,98,184,.25);margin-bottom:1.2rem}
+  .hero-badge{display:inline-flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:600;color:var(--purple);background:var(--purple-soft);border:1px solid #e0d8f6;padding:.3rem .9rem;border-radius:999px;margin-bottom:1rem}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:#5fc4a4}
+  .page-title{font-size:clamp(2.2rem,7vw,3.4rem);font-weight:700;line-height:1.1;color:var(--ink)}
+  .page-title span{color:var(--purple)}
+  .page-subtitle{margin-top:.6rem;color:var(--ink-soft);font-weight:500}
+  .meta-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;margin-top:1.2rem}
+  .chip{font-size:.8rem;font-weight:500;background:#fff;border:1px solid var(--line);border-radius:999px;padding:.3rem .85rem;color:var(--ink-soft)}
+  .content{max-width:760px;margin:0 auto;padding:0 1.25rem 3rem}
+  .intro-banner{display:flex;gap:.8rem;align-items:flex-start;background:var(--purple-soft);border:1px solid #e0d8f6;border-radius:18px;padding:1rem 1.2rem;margin-bottom:1.25rem;font-size:.95rem}
+  .policy-section{position:relative;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--accent,#8b6fd6);border-radius:20px;padding:1.4rem 1.5rem;margin-bottom:1rem;box-shadow:0 4px 0 #e3e8f6}
+  .section-header{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem}
+  .section-num{flex:none;width:34px;height:34px;border-radius:11px;background:var(--accent,#8b6fd6);color:#fff;display:grid;place-items:center;font-weight:700}
+  .section-title-text{font-size:1.15rem;font-weight:600;color:var(--ink)}
+  .policy-section p{margin-bottom:.7rem;color:#4f6483}
+  .policy-section ul{margin:.3rem 0 .6rem 1.2rem;color:#4f6483}
+  .policy-section li{margin-bottom:.45rem}
+  strong{color:var(--ink);font-weight:600}
+  a{color:var(--purple)}
+  .providers{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.4rem}
+  .provider-badge{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--ink);background:var(--purple-soft);border:1px solid #e0d8f6;border-radius:14px;padding:.55rem .9rem;font-weight:500;font-size:.9rem}
+  .provider-badge small{color:var(--ink-soft)}
+  .badge-dot{width:9px;height:9px;border-radius:50%;background:var(--purple)}
+  .note{display:flex;gap:.6rem;background:#fff6e6;border:1px solid #f5dfb0;border-radius:14px;padding:.8rem 1rem;color:#7a5a1c;font-size:.92rem}
+  .contact-box{display:grid;gap:.7rem;margin-top:.5rem}
+  .contact-row{display:flex;align-items:center;gap:.8rem;background:var(--purple-soft);border-radius:14px;padding:.7rem 1rem}
+  .contact-icon{font-size:1.4rem}
+  .contact-label{font-size:.75rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em}
+  .contact-value{font-weight:600}
+  footer{text-align:center;padding:2rem 1.25rem 2.5rem;color:var(--ink-soft);border-top:1px solid var(--line);background:rgba(255,255,255,.6)}
+  .footer-logo{font-weight:700;color:var(--purple);font-size:1.2rem;margin-bottom:.4rem}
+  .footer-copy{font-size:.85rem}
+  @media(max-width:560px){nav{padding:.8rem 1rem}.policy-section{padding:1.1rem 1rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo"><img src="gemsort-icon.png" alt="">Gem Sort</a>
+  <a href="index.html" class="nav-back">← Rodilot Studio</a>
+</nav>
+<div class="page-hero">
+  <img class="hero-icon" src="gemsort-icon.png" alt="Gem Sort simgesi">
+  <div><span class="hero-badge"><span class="live-dot"></span>Güncel · 6 Ekim 2026</span></div>
+  <h1 class="page-title">Gizlilik <span>Politikası</span></h1>
+  <p class="page-subtitle">Gem Sort · Rodilot Studio</p>
+  <div class="meta-chips">
+    <span class="chip">📅 Yürürlük: 06/10/2026</span>
+    <span class="chip">🔄 Son Güncelleme: 06/10/2026</span>
+    <span class="chip">🇹🇷 Türkiye</span>
+  </div>
+</div>
+<!-- CONTENT -->
+<div class="content">
+
+  <div class="intro-banner">
+    <span class="intro-icon">ℹ️</span>
+    <span>
+      Rodilot Studio tarafından geliştirilen <strong>Gem Sort</strong> bulmaca oyununu tercih ettiğiniz için teşekkür ederiz.
+      Gizliliğiniz bizim için önemlidir. Bu politika, uygulamamızı kullandığınızda hangi verilerin işlendiğini, nasıl kullanıldığını ve haklarınızı açıklar.
+    </span>
+  </div>
+
+  <!-- 1 -->
+  <div class="policy-section" style="--accent: #8b6fd6;">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title-text">Giriş</div>
+    </div>
+    <p>
+      Rodilot Studio tarafından geliştirilen <strong>"Gem Sort"</strong> adlı bulmaca oyununu ("Uygulama") tercih ettiğiniz için teşekkür ederiz.
+      Gizliliğiniz bizim için önemlidir. Bu Gizlilik Politikası, uygulamamızı kullandığınızda hangi verilerin işlendiğini,
+      bu verilerin nasıl kullanıldığını ve haklarınızı açıklamaktadır.
+    </p>
+  </div>
+
+  <!-- 2 -->
+  <div class="policy-section" style="--accent: #e58aa8;">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title-text">Kişisel Veri Toplama ve Kullanımı</div>
+    </div>
+    <p>
+      Gem Sort uygulaması, kullanıcılarından <strong>ad, soyad, e-posta adresi, telefon numarası, fiziksel adres veya
+      T.C. Kimlik numarası</strong> gibi hiçbir doğrudan kişisel veri talep etmez ve toplamaz.
+    </p>
+    <p>Uygulamayı kullanmak için herhangi bir hesap oluşturmanıza veya üye olmanıza gerek yoktur.</p>
+  </div>
+
+  <!-- 3 -->
+  <div class="policy-section" style="--accent: #5fc4a4;">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title-text">Cihaz İçi (Lokal) Depolama ve Oyun Verileri</div>
+    </div>
+    <p>
+      Oyun deneyiminizi kesintisiz sürdürebilmeniz amacıyla uygulamanın ürettiği veriler
+      (jeton miktarı, ulaşılan seviye, tamamlanan ve yerleştirilen oda eşyaları, dil ve renk körlüğü modu gibi ayarlar,
+      reklamsız süre sayacı) <strong>yalnızca cihazınızın yerel depolama alanında (Local Storage)</strong> saklanır.
+    </p>
+    <ul>
+      <li>Bu veriler bizim sunucularımıza gönderilmez veya tarafımızca uzaktan erişilmez.</li>
+      <li><strong>Veri Silme:</strong> Uygulamayı cihazınızdan kaldırdığınızda veya cihaz ayarlarından uygulamanın
+      verilerini temizlediğinizde, bu oyun içi ilerleme verileri kalıcı olarak silinir ve tarafımızca geri getirilemez.</li>
+    </ul>
+  </div>
+
+  <!-- 4 -->
+  <div class="policy-section" style="--accent: #f0b259;">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title-text">Satın Alımlar</div>
+    </div>
+    <p>Gem Sort şu anda <strong>uygulama içi satın alma sunmaz</strong>. Jetonlar oyun içinde kazanılır.</p>
+    <ul>
+      <li>Ödeme bilgisi (kart numarası, banka hesabı vb.) Rodilot Studio tarafından <strong>toplanmaz, işlenmez veya saklanmaz</strong>.</li>
+      <li>İleride satın alma eklenirse bu politika güncellenir ve "Son Güncelleme" tarihi yenilenir.</li>
+    </ul>
+  </div>
+
+  <!-- 5 -->
+  <div class="policy-section" style="--accent: #62aae6;">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title-text">Otomatik Toplanan Teknik Veriler ve Reklamlar</div>
+    </div>
+    <p>Uygulamanın çalışması ve ücretsiz kalabilmesi için aşağıdaki veriler otomatik olarak işlenebilir:</p>
+    <ul>
+      <li><strong>Reklamlar:</strong> Uygulama Google AdMob ile banner, geçiş (interstitial) ve ödüllü reklamlar gösterir. Bu reklamlar için reklam SDK'sı cihaz bilgilerini (cihaz modeli, işletim sistemi sürümü, dil, yaklaşık konum, IP adresi) ve <strong>Reklam Kimliği'ni (Advertising ID)</strong> işleyebilir. Cihaz ayarlarınızdan reklam kişiselleştirmesini sınırlandırabilir veya Reklam Kimliği'ni sıfırlayabilirsiniz.</li>
+      <li><strong>Rıza (AB/Birleşik Krallık):</strong> Bu bölgelerde Google'ın onay (UMP) formu gösterilir; reklam tercihlerinizi uygulama içinden istediğiniz zaman değiştirebilirsiniz.</li>
+      <li><strong>Bağlantı durumu:</strong> Uygulama, reklamların yüklenebilmesi için cihazın internet bağlantısının olup olmadığını kontrol eder. Bu bilgi sunucularımıza gönderilmez.</li>
+      <li>Uygulama kendi analiz veya çökme raporlama servisini kullanmaz.</li>
+    </ul>
+  </div>
+
+  <!-- 6 -->
+  <div class="policy-section" style="--accent: #8b6fd6;">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title-text">Üçüncü Taraf Hizmet Sağlayıcılar</div>
+    </div>
+    <p>Aşağıdaki üçüncü taraf hizmetler kullanılır. Bu hizmetlerin veri işleme süreçleri kendi gizlilik politikalarına tabidir:</p>
+    <div class="providers">
+      <a class="provider-badge" href="https://policies.google.com/privacy" target="_blank" rel="noopener">
+        <span class="badge-dot"></span> Google AdMob <small>— Reklam Sunumu ↗</small>
+      </a>
+      <a class="provider-badge" href="https://policies.google.com/privacy" target="_blank" rel="noopener">
+        <span class="badge-dot"></span> Google Play Services <small>— Gizlilik Politikası ↗</small>
+      </a>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="policy-section" style="--accent: #e58aa8;">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title-text">Veri Paylaşımı</div>
+    </div>
+    <p>Kullanıcı verilerinizi hiçbir şart altında üçüncü şahıslara <strong>satmıyoruz</strong>. Yalnızca aşağıdaki durumlarda paylaşım söz konusu olabilir:</p>
+    <ul>
+      <li>Yukarıda belirtilen üçüncü taraf servis sağlayıcılarla (sadece uygulamanın çalışması ve reklam gösterimi için gerekli teknik düzeyde).</li>
+      <li>Geçerli bir yasal süreç, mahkeme kararı veya resmi makamların yasal talebi doğrultusunda yasal yükümlülüklerimizi yerine getirmek amacıyla.</li>
+    </ul>
+  </div>
+
+  <!-- 8 -->
+  <div class="policy-section" style="--accent: #5fc4a4;">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <div class="section-title-text">Çocukların Gizliliği</div>
+    </div>
+    <p>
+      Uygulamamız genel kitleye hitap etmekle birlikte, <strong>13 yaşın altındaki çocuklardan</strong> bilerek herhangi bir kişisel veri toplamayı amaçlamaz.
+    </p>
+  </div>
+
+  <!-- 9 -->
+  <div class="policy-section" style="--accent: #f0b259;">
+    <div class="section-header">
+      <div class="section-num">9</div>
+      <div class="section-title-text">Veri Silme ve Kullanıcı Hakları</div>
+    </div>
+    <p>
+      Uygulamamız kişisel bir hesap oluşturmanızı gerektirmediği ve verilerinizi cihazınızda yerel olarak tuttuğu için;
+      verilerinizi silmek istediğinizde:
+    </p>
+    <ul>
+      <li>Uygulamayı cihazınızdan tamamen kaldırmanız (uninstall), <strong>veya</strong></li>
+      <li>Cihazınızın <strong>Ayarlar → Uygulamalar → Gem Sort → Depolama → "Verileri Temizle"</strong> adımlarını izlemeniz yeterlidir.</li>
+    </ul>
+    <div class="note">
+      <span>⚠️</span>
+      <span>Bu işlem, size ait tüm yerel verileri kalıcı olarak yok edecektir.</span>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="policy-section" style="--accent: #62aae6;">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <div class="section-title-text">Politika Güncellemeleri</div>
+    </div>
+    <p>
+      Bu Gizlilik Politikası, mevzuat değişiklikleri veya uygulamaya eklenecek yeni özellikler doğrultusunda zaman zaman güncellenebilir.
+      Herhangi bir değişiklik yapıldığında, güncel metin bu sayfada yayınlanacak ve "Son Güncelleme Tarihi" yenilenecektir.
+    </p>
+  </div>
+
+  <!-- 11 -->
+  <div class="policy-section" style="--accent: #8b6fd6;">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <div class="section-title-text">İletişim</div>
+    </div>
+    <p>
+      Bu Gizlilik Politikası veya verilerinizin işlenmesiyle ilgili herhangi bir sorunuz, öneriniz veya şikayetiniz varsa,
+      lütfen bizimle iletişime geçmekten çekinmeyin:
+    </p>
+    <div class="contact-box">
+      <div class="contact-row">
+        <div class="contact-icon">🏢</div>
+        <div>
+          <div class="contact-label">Geliştirici</div>
+          <div class="contact-value">Rodilot Studio</div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon">✉️</div>
+        <div>
+          <div class="contact-label">E-posta</div>
+          <div class="contact-value"><a href="mailto:studiorodilot@gmail.com">studiorodilot@gmail.com</a></div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon">📍</div>
+        <div>
+          <div class="contact-label">Ülke</div>
+          <div class="contact-value">Türkiye</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo">Gem Sort</div>
+  <div class="footer-copy">© <span id="year"></span> Rodilot Studio. Tüm hakları saklıdır.</div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
