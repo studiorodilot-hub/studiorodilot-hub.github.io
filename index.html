@@ -203,54 +203,85 @@
         align-self: flex-start;
       }
       .kelime {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid var(--line);
-      }
-      .kelime .app-icon {
-        background: linear-gradient(145deg, #f5d07a, #e8b84b);
-        color: #1a1a2e;
-        display: grid;
-        place-items: center;
-        font-weight: 800;
-        font-size: 2.5rem;
-        box-shadow: 0 5px 0 #b98d2a;
-      }
-      .kelime .btn.primary {
-        background: #e8b84b;
-        color: #1a1a2e;
-        box-shadow: 0 4px 0 #b98d2a;
-      }
-      .kelime .btn.ghost {
-        background: rgba(255, 255, 255, 0.08);
-        color: #fff;
-        border: 1px solid var(--line);
+        --accent: #e8b84b;
+        --accent-deep: #b98d2a;
+        --on-accent: #1a1a2e;
+        --shadow: #ead9a8;
+        --title: #8a6414;
+        --link: #a47a1c;
+        --link-line: #f0e0b8;
+        background: linear-gradient(160deg, #fffaf0, #fff3d9 55%, #fff0e4);
       }
       .gem {
-        font-family: 'Fredoka', system-ui, sans-serif;
+        --accent: #7a62b8;
+        --accent-deep: #5d47a0;
+        --on-accent: #fff;
+        --shadow: #d3c9ef;
+        --title: #5d47a0;
+        --link: #7a62b8;
+        --link-line: #e0d8f6;
         background: linear-gradient(160deg, #eef0ff, #f6eeff 55%, #fff1f7);
+      }
+      .app {
+        font-family: 'Fredoka', system-ui, sans-serif;
         color: #435c7c;
         border: 1px solid #fff;
         box-shadow:
-          0 6px 0 #d3c9ef,
+          0 6px 0 var(--shadow),
           0 18px 40px rgba(0, 0, 0, 0.35);
       }
-      .gem .app-icon {
+      .app-icon {
         box-shadow:
-          0 5px 0 #d3c9ef,
-          0 10px 22px rgba(122, 98, 184, 0.3);
+          0 5px 0 var(--shadow),
+          0 10px 22px rgba(0, 0, 0, 0.18);
       }
-      .gem h3 {
-        color: #5d47a0;
+      .app h3 {
+        color: var(--title);
       }
-      .gem .btn.ghost {
+      .btn.primary {
+        background: var(--accent);
+        color: var(--on-accent);
+        box-shadow: 0 4px 0 var(--accent-deep);
+      }
+      .btn.ghost {
         background: #fff;
-        color: #7a62b8;
-        border: 1px solid #e0d8f6;
+        color: var(--link);
+        border: 1px solid var(--link-line);
       }
-      .gem .btn.primary {
-        background: #7a62b8;
+      .gems {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .gems i {
+        width: 15px;
+        height: 15px;
+        border-radius: 4px;
+        transform: rotate(45deg);
+        display: block;
+      }
+      .tiles {
+        display: flex;
+        gap: 0.4rem;
+      }
+      .tiles i {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 0.85rem;
+        width: 24px;
+        height: 24px;
+        display: grid;
+        place-items: center;
+        border-radius: 6px;
+        background: #fff;
+        color: #8a6414;
+        box-shadow: 0 2px 0 #ead9a8;
+      }
+      .pill.purple {
+        background: #8b6fd6;
         color: #fff;
-        box-shadow: 0 4px 0 #5d47a0;
+      }
+      .pill.purple:hover {
+        filter: brightness(1.08);
       }
       .logo {
         display: inline-flex;
@@ -268,22 +299,6 @@
         object-position: center top;
         background: #fff;
         flex: none;
-      }
-      .gem .soon {
-        background: #f4f0fd;
-        color: #7a62b8;
-        border: 1px solid #e0d8f6;
-      }
-      .gems {
-        display: flex;
-        gap: 0.5rem;
-      }
-      .gems i {
-        width: 15px;
-        height: 15px;
-        border-radius: 4px;
-        transform: rotate(45deg);
-        display: block;
       }
       footer {
         border-top: 1px solid var(--line);
@@ -347,7 +362,7 @@
       <p>Rodilot Studio'da harflerle gizli kelimeleri bul, kristalleri renklerine göre ayır.</p>
       <div class="hero-actions">
         <a class="pill yellow" href="https://play.google.com/store/apps/details?id=com.rodilot.studio.kelimeustasi" target="_blank" rel="noopener">Kelime Ustası'nı İndir</a>
-        <a class="pill ghost" href="https://play.google.com/store/apps/details?id=com.rodilot.studio.gemsort" target="_blank" rel="noopener">Gem Sort'u İndir</a>
+        <a class="pill purple" href="https://play.google.com/store/apps/details?id=com.rodilot.studio.gemsort" target="_blank" rel="noopener">Gem Sort'u İndir</a>
       </div>
     </header>
     <main>
@@ -361,6 +376,7 @@
                 <div class="tag">Türkçe sözcük bulmaca oyunu</div>
               </div>
             </div>
+            <div class="tiles" aria-hidden="true"><i>K</i><i>E</i><i>L</i><i>İ</i><i>M</i><i>E</i></div>
             <p class="desc">
               Harfleri kullanarak gizli kelimeleri bul, seviyeleri geç ve kelime dağarcığını
               geliştir.
