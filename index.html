@@ -247,6 +247,28 @@
         color: #7a62b8;
         border: 1px solid #e0d8f6;
       }
+      .gem .btn.primary {
+        background: #7a62b8;
+        color: #fff;
+        box-shadow: 0 4px 0 #5d47a0;
+      }
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.7rem;
+      }
+      .logo b {
+        font-weight: 800;
+      }
+      .logo-mascot {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center top;
+        background: #fff;
+        flex: none;
+      }
       .gem .soon {
         background: #f4f0fd;
         color: #7a62b8;
@@ -309,8 +331,8 @@
     <nav>
       <div class="wrap">
         <a class="logo" href="index.html">
-          Rodilot
-          <span>Studio</span>
+          <img class="logo-mascot" src="mascot.png" alt="" />
+          <b>Rodilot <span>Studio</span></b>
         </a>
         <div class="nav-right">
           <a class="nav-link" href="mailto:studiorodilot@gmail.com">İletişim</a>
@@ -324,15 +346,8 @@
       <h2>Kelime bulmacası ve renkli kristal sıralama oyunları</h2>
       <p>Rodilot Studio'da harflerle gizli kelimeleri bul, kristalleri renklerine göre ayır.</p>
       <div class="hero-actions">
-        <a
-          class="pill yellow"
-          href="https://play.google.com/store/apps/details?id=com.rodilot.studio.kelimeustasi"
-          target="_blank"
-          rel="noopener"
-        >
-          Google Play'de İndir
-        </a>
-        <a class="pill ghost" href="mailto:studiorodilot@gmail.com">İletişim</a>
+        <a class="pill yellow" href="https://play.google.com/store/apps/details?id=com.rodilot.studio.kelimeustasi" target="_blank" rel="noopener">Kelime Ustası'nı İndir</a>
+        <a class="pill ghost" href="https://play.google.com/store/apps/details?id=com.rodilot.studio.gemsort" target="_blank" rel="noopener">Gem Sort'u İndir</a>
       </div>
     </header>
     <main>
@@ -340,7 +355,7 @@
         <div class="grid">
           <article class="app kelime">
             <div class="app-top">
-              <img class="app-icon" src="https://play-lh.googleusercontent.com/tyy8HLZXsmQCWH2KZ3Trf1cIAYOccZ8pPsskh4FQIXnEy9Pm6DLyXxubxh-vsFCdr1K8CK4ppW3Uob9h1vcbsg=w480-h960" alt="Kelime Ustası simgesi" />
+              <img class="app-icon" src="kelimeustasi-icon.png" alt="Kelime Ustası simgesi" />
               <div>
                 <h3>Kelime Ustası</h3>
                 <div class="tag">Türkçe sözcük bulmaca oyunu</div>
@@ -371,7 +386,6 @@
                 <div class="tag">Kristal sıralama ve oda dekorasyonu</div>
               </div>
             </div>
-            <span class="soon">Yakında Google Play'de</span>
             <div class="gems" aria-hidden="true">
               <i style="background: #8b6fd6"></i>
               <i style="background: #e58aa8"></i>
@@ -384,6 +398,7 @@
               eşyalarla doldur.
             </p>
             <div class="actions">
+              <a class="btn primary" href="https://play.google.com/store/apps/details?id=com.rodilot.studio.gemsort" target="_blank" rel="noopener">Google Play'de İndir</a>
               <a class="btn ghost" href="gemsort.html">Detaylar</a>
               <a class="btn ghost" href="gemsort-privacy.html">Gizlilik</a>
             </div>
