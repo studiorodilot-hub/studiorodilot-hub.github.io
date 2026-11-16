@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Writhink: roman ve senaryo yazım stüdyosu. Tamamen yerel çalışır, hesap ve internet gerektirmez. Mac ve Windows için."
+    />
+    <title>Writhink – Roman ve Senaryo Yazım Stüdyosu</title>
+    <link rel="icon" href="writhink-icon.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #14110f;
+        --panel: #1d1916;
+        --line: rgba(255, 255, 255, 0.1);
+        --ink: #f4efe8;
+        --muted: rgba(244, 239, 232, 0.66);
+        --amber: #fcd34d;
+        --amber-deep: #d97706;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        width: 100%;
+      }
+      nav .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 1.1rem;
+        padding-bottom: 1.1rem;
+      }
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.7rem;
+        font-weight: 800;
+        font-size: 1.2rem;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .logo img {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+      }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 1.6rem;
+      }
+      .nav-link {
+        color: var(--muted);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .nav-link:hover {
+        color: #fff;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        border-radius: 999px;
+        text-decoration: none;
+        padding: 0.85rem 1.7rem;
+      }
+      .pill.amber {
+        background: linear-gradient(135deg, var(--amber), var(--amber-deep));
+        color: #1c1917;
+      }
+      .pill.amber:hover {
+        filter: brightness(1.07);
+      }
+      .pill.ghost {
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--ink);
+      }
+      .pill.ghost:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .hero {
+        text-align: center;
+        padding: 5rem 1.5rem 3rem;
+        max-width: 820px;
+        margin: 0 auto;
+      }
+      .hero-icon {
+        width: 112px;
+        height: 112px;
+        border-radius: 28px;
+        box-shadow: 0 18px 50px rgba(217, 119, 6, 0.28);
+      }
+      .badge {
+        display: inline-block;
+        margin-top: 1.6rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--amber);
+        background: rgba(252, 211, 77, 0.08);
+        border: 1px solid rgba(252, 211, 77, 0.35);
+        border-radius: 999px;
+        padding: 0.4rem 1.1rem;
+      }
+      .hero h1 {
+        font-size: clamp(2.8rem, 8vw, 4.6rem);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        font-weight: 800;
+        margin-top: 1.2rem;
+      }
+      .hero h1 span {
+        background: linear-gradient(135deg, var(--amber), var(--amber-deep));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .hero p.lead {
+        margin: 1.3rem auto 0;
+        max-width: 620px;
+        font-size: 1.15rem;
+        color: var(--muted);
+      }
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.9rem;
+        justify-content: center;
+        margin-top: 2.1rem;
+      }
+      .hero small {
+        display: block;
+        margin-top: 1.1rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      /* Editör maketi */
+      .mock {
+        max-width: 880px;
+        margin: 1rem auto 0;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: #faf8f5;
+        color: #1f1d1a;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+      }
+      .mock-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.7rem 1rem;
+        background: #ece7df;
+        border-bottom: 1px solid #ddd5c8;
+      }
+      .mock-bar i {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: #cfc6b8;
+      }
+      .mock-bar span {
+        margin-left: 0.6rem;
+        font-size: 0.8rem;
+        color: #7a7266;
+      }
+      .mock-body {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        min-height: 300px;
+      }
+      .mock-side {
+        background: #f1ece4;
+        border-right: 1px solid #ddd5c8;
+        padding: 1rem;
+        font-size: 0.85rem;
+        color: #5b5348;
+      }
+      .mock-side b {
+        display: block;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #a39a8b;
+        margin-bottom: 0.5rem;
+      }
+      .mock-side div {
+        padding: 0.35rem 0.6rem;
+        border-radius: 8px;
+      }
+      .mock-side div.on {
+        background: #fff;
+        color: #1f1d1a;
+        font-weight: 700;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+      }
+      .mock-page {
+        padding: 2.2rem 2.6rem;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 1.02rem;
+        line-height: 1.85;
+      }
+      .mock-page h4 {
+        font-family: Georgia, serif;
+        font-size: 1.4rem;
+        margin-bottom: 0.9rem;
+      }
+      .caret {
+        display: inline-block;
+        width: 2px;
+        height: 1.1em;
+        background: var(--amber-deep);
+        vertical-align: text-bottom;
+        animation: blink 1s steps(2) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      section {
+        padding: 4.2rem 0 0;
+      }
+      .eyebrow {
+        color: var(--amber);
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      h2 {
+        font-size: clamp(1.8rem, 4.5vw, 2.5rem);
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        margin-top: 0.6rem;
+      }
+      .sub {
+        color: var(--muted);
+        max-width: 640px;
+        margin-top: 0.9rem;
+        font-size: 1.05rem;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.1rem;
+        margin-top: 2.2rem;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 1.5rem;
+      }
+      .card .ic {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        font-size: 1.3rem;
+        background: rgba(252, 211, 77, 0.1);
+        border: 1px solid rgba(252, 211, 77, 0.25);
+        margin-bottom: 1rem;
+      }
+      .card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.4rem;
+      }
+      .card p {
+        color: var(--muted);
+        font-size: 0.97rem;
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.1rem;
+        margin-top: 2.2rem;
+      }
+      .split .card ul {
+        list-style: none;
+        margin-top: 0.8rem;
+      }
+      .split .card li {
+        padding: 0.3rem 0 0.3rem 1.5rem;
+        position: relative;
+        color: var(--muted);
+        font-size: 0.97rem;
+      }
+      .split .card li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.85rem;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--amber-deep);
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-top: 1.6rem;
+      }
+      .chips span {
+        padding: 0.45rem 1rem;
+        border-radius: 999px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        font-size: 0.92rem;
+        font-weight: 500;
+      }
+
+      .privacy {
+        background: linear-gradient(160deg, #2a2118, #1d1916);
+        border: 1px solid rgba(252, 211, 77, 0.25);
+        border-radius: 26px;
+        padding: 2.4rem;
+      }
+      .privacy ul {
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.8rem 1.6rem;
+        margin-top: 1.4rem;
+      }
+      .privacy li {
+        padding-left: 1.6rem;
+        position: relative;
+        color: var(--muted);
+      }
+      .privacy li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: var(--amber);
+        font-weight: 800;
+      }
+
+      .download {
+        text-align: center;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 26px;
+        padding: 2.8rem 1.5rem;
+      }
+      .download .hero-actions {
+        margin-top: 1.6rem;
+      }
+      .download small {
+        display: block;
+        margin-top: 1.2rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      main {
+        flex: 1;
+        padding-bottom: 4.5rem;
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      footer .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem 2rem;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1.6rem;
+        padding-bottom: 1.6rem;
+      }
+      footer a {
+        color: var(--muted);
+        text-decoration: none;
+        margin-right: 1.4rem;
+      }
+      footer a:hover {
+        color: #fff;
+      }
+      @media (max-width: 640px) {
+        .nav-link {
+          display: none;
+        }
+        .hero {
+          padding-top: 3rem;
+        }
+        .mock-body {
+          grid-template-columns: 1fr;
+        }
+        .mock-side {
+          display: none;
+        }
+        .mock-page {
+          padding: 1.5rem;
+        }
+        .privacy {
+          padding: 1.6rem;
+        }
+        footer .wrap {
+          justify-content: center;
+          text-align: center;
+        }
+        footer a {
+          margin: 0 0.7rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="wrap">
+        <a class="logo" href="writhink.html">
+          <img src="writhink-icon.png" alt="" />
+          Writhink
+        </a>
+        <div class="nav-right">
+          <a class="nav-link" href="#ozellikler">Özellikler</a>
+          <a class="nav-link" href="index.html">Rodilot Studio</a>
+          <a class="pill amber" href="#indir">İndir</a>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <header class="hero">
+        <img class="hero-icon" src="writhink-icon.png" alt="Writhink simgesi" />
+        <div><span class="badge">Mac ve Windows için</span></div>
+        <h1>Yaz. <span>Düzenle.</span> Bitir.</h1>
+        <p class="lead">
+          Writhink, roman ve senaryo için tek bir yazım stüdyosu. Bölümlerin, karakterlerin ve
+          notların aynı yerde; yazdıkların ise yalnızca senin bilgisayarında.
+        </p>
+        <div class="hero-actions">
+          <a class="pill amber" href="#indir">Writhink'i İndir</a>
+          <a class="pill ghost" href="#ozellikler">Özellikleri Gör</a>
+        </div>
+        <small>Hesap yok, abonelik yok, internet gerekmez.</small>
+      </header>
+
+      <div class="wrap">
+        <div class="mock" aria-hidden="true">
+          <div class="mock-bar"><i></i><i></i><i></i><span>Writhink · Roman</span></div>
+          <div class="mock-body">
+            <div class="mock-side">
+              <b>Bölümler</b>
+              <div>1. Gelen Mektup</div>
+              <div class="on">2. Eski Ev</div>
+              <div>3. Sessizlik</div>
+              <div>4. Yağmurdan Sonra</div>
+            </div>
+            <div class="mock-page">
+              <h4>2. Eski Ev</h4>
+              Kapıyı ittiğinde menteşeler yılların uykusundan uyanır gibi inledi. İçeride toz,
+              ışığın altında yavaşça dönüyordu ve hava, annesinin kokusunu hâlâ saklıyordu<span class="caret"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <section id="ozellikler">
+          <span class="eyebrow">Özellikler</span>
+          <h2>Bir kitabın ihtiyacı olan her şey</h2>
+          <p class="sub">
+            Sayfayı doldurmaktan hikâyeyi planlamaya, karakterleri tanımaktan son halini dışa
+            aktarmaya kadar her adım uygulamanın içinde.
+          </p>
+          <div class="cards">
+            <div class="card">
+              <div class="ic">✍️</div>
+              <h3>Roman editörü</h3>
+              <p>
+                Bölümlere ayrılmış, dikkatini dağıtmayan bir yazım alanı. Bölümleri sürükle, sırala,
+                iç içe düzenle.
+              </p>
+            </div>
+            <div class="card">
+              <div class="ic">🎬</div>
+              <h3>Senaryo editörü</h3>
+              <p>
+                Sahne, aksiyon, karakter ve diyalog öğeleriyle senaryo biçiminde yaz. Sayfa sayısı
+                senaryo ölçüsüne göre hesaplanır.
+              </p>
+            </div>
+            <div class="card">
+              <div class="ic">🧑‍🎨</div>
+              <h3>Karakter stüdyosu</h3>
+              <p>
+                Karakter dosyaları, yolculuk ve ilişki haritasıyla kahramanlarını ve aralarındaki
+                bağları gör.
+              </p>
+            </div>
+            <div class="card">
+              <div class="ic">🗂️</div>
+              <h3>Planlama ve yapı</h3>
+              <p>
+                Mantar pano, anahat tablosu, zaman çizelgesi ve taslak görünümüyle hikâyenin
+                iskeletini kur.
+              </p>
+            </div>
+            <div class="card">
+              <div class="ic">📈</div>
+              <h3>Duygusal yay ve ritim</h3>
+              <p>
+                Hikâyenin duygu eğrisini çiz, istatistik ve ritim grafikleriyle temponu izle.
+              </p>
+            </div>
+            <div class="card">
+              <div class="ic">🔍</div>
+              <h3>Üslup ve tekrar</h3>
+              <p>
+                Sık tekrar eden sözcükleri ve üslup alışkanlıklarını yakala, metnini sadeleştir.
+              </p>
+            </div>
+            <div class="card">
+              <div class="ic">📚</div>
+              <h3>Araştırma klasörü</h3>
+              <p>Notlarını, bağlantılarını ve kaynaklarını yazdığın projenin yanında tut.</p>
+            </div>
+            <div class="card">
+              <div class="ic">🏅</div>
+              <h3>Hedef ve rozetler</h3>
+              <p>
+                Günlük yazma hedefi koy, ilerlemeni gör, istikrarın için rozetler kazan.
+              </p>
+            </div>
+            <div class="card">
+              <div class="ic">⏪</div>
+              <h3>Geçmiş ve yedek</h3>
+              <p>
+                Sürüm geçmişi, otomatik yedekler ve çöp kutusu sayesinde hiçbir şey kolay kolay
+                kaybolmaz.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <span class="eyebrow">Biçimler</span>
+          <h2>Yazdığın her yere uyumlu</h2>
+          <p class="sub">
+            Başka bir araçtan içe aktar, bitirdiğinde ihtiyacın olan biçimde dışa aktar.
+          </p>
+          <div class="chips">
+            <span>PDF</span>
+            <span>Word (.docx)</span>
+            <span>EPUB</span>
+            <span>HTML</span>
+            <span>Markdown</span>
+            <span>Fountain</span>
+            <span>Final Draft (.fdx)</span>
+            <span>Düz metin</span>
+          </div>
+        </section>
+
+        <section>
+          <div class="privacy">
+            <span class="eyebrow">Gizlilik</span>
+            <h2>Yazdıkların yalnızca sende</h2>
+            <p class="sub">
+              Writhink hiçbir veri toplamaz. Projelerin bilgisayarında açık dosyalar olarak durur;
+              istediğin gibi kopyalar, taşır, yedekler ya da silersin.
+            </p>
+            <ul>
+              <li>Hesap ve giriş yok</li>
+              <li>Reklam, çerez ve analiz yok</li>
+              <li>Çevrimdışı çalışır</li>
+              <li>Düz dosya (.json + .md) olarak saklanır</li>
+              <li>Tüm kitaplığı tek zip ile yedekle</li>
+              <li>Yazdıklarının tüm hakkı sende</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="indir">
+          <div class="download">
+            <span class="eyebrow">İndir</span>
+            <h2>Writhink'i dene</h2>
+            <p class="sub" style="margin-left: auto; margin-right: auto">
+              Ücretsiz indir, ilk bölümünü yazmaya başla.
+            </p>
+            <div class="hero-actions">
+              <a
+                class="pill amber"
+                href="https://github.com/studiorodilot-hub/studiorodilot-hub.github.io/releases/latest"
+                target="_blank"
+                rel="noopener"
+              >
+                Mac için indir
+              </a>
+              <a
+                class="pill ghost"
+                href="https://github.com/studiorodilot-hub/studiorodilot-hub.github.io/releases/latest"
+                target="_blank"
+                rel="noopener"
+              >
+                Windows için indir
+              </a>
+            </div>
+            <small>Sürüm 0.5.8 · Mac (Apple Silicon) ve Windows (64 bit)</small>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <div>
+          <a href="index.html">Rodilot Studio</a>
+          <a href="mailto:studiorodilot@gmail.com">İletişim</a>
+        </div>
+        <div>
+          ©
+          <span id="y"></span>
+          Rodilot Studio
+        </div>
+      </div>
+    </footer>
+    <script>
+      document.getElementById('y').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

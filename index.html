@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Rodilot Studio: Kelime Ustası ve Gem Sort mobil oyunları." />
+    <meta name="description" content="Rodilot Studio: Kelime Ustası ve Gem Sort mobil oyunları, Writhink yazım stüdyosu." />
     <meta name="google-site-verification" content="iCTYLAVmBca95k1uxTILcv6OiKRvJxV5BGcmFwBn-l8" />
-    <title>Rodilot Studio – Mobil Oyunlar</title>
+    <title>Rodilot Studio – Oyunlar ve Uygulamalar</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap"
       rel="stylesheet"
@@ -276,6 +276,32 @@
         color: #8a6414;
         box-shadow: 0 2px 0 #ead9a8;
       }
+      .writ {
+        --accent: #f0b429;
+        --accent-deep: #b87708;
+        --on-accent: #1c1917;
+        --shadow: #0a0908;
+        --title: #fcd34d;
+        --link: #fcd34d;
+        --link-line: rgba(252, 211, 77, 0.35);
+        background: linear-gradient(160deg, #2a2118, #14110f 70%);
+        color: #e7dfd3;
+        border-color: rgba(252, 211, 77, 0.25);
+      }
+      .writ .btn.ghost {
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .lines {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      .lines i {
+        display: block;
+        height: 6px;
+        border-radius: 3px;
+        background: rgba(252, 211, 77, 0.4);
+      }
       .pill.purple {
         background: #8b6fd6;
         color: #fff;
@@ -363,6 +389,7 @@
       <div class="hero-actions">
         <a class="pill yellow" href="https://play.google.com/store/apps/details?id=com.rodilot.studio.kelimeustasi" target="_blank" rel="noopener">Kelime Ustası'nı İndir</a>
         <a class="pill purple" href="https://play.google.com/store/apps/details?id=com.rodilot.studio.gemsort" target="_blank" rel="noopener">Gem Sort'u İndir</a>
+        <a class="pill ghost" href="writhink.html">Writhink'i Keşfet</a>
       </div>
     </header>
     <main>
@@ -419,6 +446,28 @@
               <a class="btn ghost" href="gemsort-privacy.html">Gizlilik</a>
             </div>
           </article>
+          <article class="app writ">
+            <div class="app-top">
+              <img class="app-icon" src="writhink-icon.png" alt="Writhink simgesi" />
+              <div>
+                <h3>Writhink</h3>
+                <div class="tag">Roman ve senaryo yazım stüdyosu</div>
+              </div>
+            </div>
+            <div class="lines" aria-hidden="true">
+              <i style="width: 90%"></i>
+              <i style="width: 100%"></i>
+              <i style="width: 62%"></i>
+            </div>
+            <p class="desc">
+              Roman ve senaryonu karakterlerin, planın ve notlarınla tek yerde yaz. Mac ve Windows
+              için, çevrimdışı ve verini toplamadan.
+            </p>
+            <div class="actions">
+              <a class="btn primary" href="writhink.html#indir">İndir</a>
+              <a class="btn ghost" href="writhink.html">Detaylar</a>
+            </div>
+          </article>
         </div>
       </div>
     </main>
@@ -427,6 +476,7 @@
         <div>
           <a href="privacy.html">Kelime Ustası Gizlilik</a>
           <a href="gemsort-privacy.html">Gem Sort Gizlilik</a>
+          <a href="writhink.html">Writhink</a>
           <a href="mailto:studiorodilot@gmail.com">İletişim</a>
           <a
             href="https://play.google.com/store/apps/developer?id=Rodilot+Studio"
