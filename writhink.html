@@ -416,8 +416,14 @@
         color: #fff;
       }
       @media (max-width: 640px) {
-        .nav-link {
+        .nav-link:not(.home-link) {
           display: none;
+        }
+        .home-link {
+          font-size: 0.9rem;
+        }
+        .nav-right {
+          gap: 0.9rem;
         }
         .hero {
           padding-top: 3rem;
@@ -453,7 +459,7 @@
         </a>
         <div class="nav-right">
           <a class="nav-link" href="#ozellikler">Özellikler</a>
-          <a class="nav-link" href="index.html">Rodilot Studio</a>
+          <a class="nav-link home-link" href="index.html">← Rodilot Studio Ana Sayfa</a>
           <a class="pill amber" href="#indir">İndir</a>
         </div>
       </div>
@@ -644,7 +650,7 @@
     <footer>
       <div class="wrap">
         <div>
-          <a href="index.html">Rodilot Studio</a>
+          <a href="index.html">← Rodilot Studio Ana Sayfa</a>
           <a href="mailto:studiorodilot@gmail.com">İletişim</a>
         </div>
         <div>
